@@ -15,5 +15,15 @@ public enum DataSourceType
     /**
      * 从库
      */
-    SLAVE
+    SLAVE,
+
+    /**
+     * 梦想库
+     */
+    DREAM_DATA_SOURCE,
+
+    /**
+     * 交易库
+     */
+    TRADE_DATA_SOURCE
 }

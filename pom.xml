@@ -30,6 +30,7 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+        <apollo.version>1.5.1</apollo.version>
     </properties>
 	
     <!-- 依赖声明 -->
@@ -170,6 +171,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!--apollo-->
+            <dependency>
+                <groupId>com.ctrip.framework.apollo</groupId>
+                <artifactId>apollo-client</artifactId>
+                <version>${apollo.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -180,6 +188,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>operation-common</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -49,6 +49,36 @@ public class DruidConfig
         return druidProperties.dataSource(dataSource);
     }
 
+    /**
+     * 梦想库数据源
+     *
+     * @param druidProperties
+     * @return
+     */
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.dream")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.dream", name = "enabled", havingValue = "true")
+    public DataSource dreamDataSource(DruidProperties druidProperties)
+    {
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+        return druidProperties.dataSource(dataSource);
+    }
+
+    /**
+     * 交易数据源
+     *
+     * @param druidProperties
+     * @return
+     */
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.trade")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.trade", name = "enabled", havingValue = "true")
+    public DataSource tradeDataSource(DruidProperties druidProperties)
+    {
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+        return druidProperties.dataSource(dataSource);
+    }
+
     @Bean(name = "dynamicDataSource")
     @Primary
     public DynamicDataSource dataSource(DataSource masterDataSource)
@@ -56,6 +86,8 @@ public class DruidConfig
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
         setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
+        setDataSource(targetDataSources, DataSourceType.DREAM_DATA_SOURCE.name(), "dreamDataSource");
+        setDataSource(targetDataSources, DataSourceType.TRADE_DATA_SOURCE.name(), "tradeDataSource");
         return new DynamicDataSource(masterDataSource, targetDataSources);
     }
     
