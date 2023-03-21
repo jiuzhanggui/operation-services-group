@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.loveapp.operation.trade.dao.OrderSearchTradeDao">
+
+    <resultMap type="cn.loveapp.operation.trade.entity.OrderSearchTrade" id="OrderSearchTradeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="nick" column="nick" jdbcType="VARCHAR"/>
+        <result property="articleName" column="article_name" jdbcType="VARCHAR"/>
+        <result property="articleCode" column="article_code" jdbcType="VARCHAR"/>
+        <result property="articleItemName" column="article_item_name" jdbcType="VARCHAR"/>
+        <result property="itemCode" column="item_code" jdbcType="VARCHAR"/>
+        <result property="orderCycle" column="order_cycle" jdbcType="VARCHAR"/>
+        <result property="createDate" column="createDate" jdbcType="TIMESTAMP"/>
+        <result property="orderCycleStart" column="order_cycle_start" jdbcType="TIMESTAMP"/>
+        <result property="orderCycleEnd" column="order_cycle_end" jdbcType="TIMESTAMP"/>
+        <result property="bizType" column="biz_type" jdbcType="INTEGER"/>
+        <result property="fee" column="fee" jdbcType="INTEGER"/>
+        <result property="promFee" column="prom_fee" jdbcType="INTEGER"/>
+        <result property="refundFee" column="refund_fee" jdbcType="INTEGER"/>
+        <result property="totalPayFee" column="total_pay_fee" jdbcType="INTEGER"/>
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="bizOrderId" column="biz_order_id" jdbcType="VARCHAR"/>
+        <result property="activityCode" column="activity_code" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="maturitydt" column="maturitydt" jdbcType="TIMESTAMP"/>
+        <result property="appkey" column="appkey" jdbcType="VARCHAR"/>
+        <result property="eventName" column="event_name" jdbcType="VARCHAR"/>
+        <result property="from" column="from" jdbcType="VARCHAR"/>
+        <result property="extension" column="extension" jdbcType="VARCHAR"/>
+        <result property="originality" column="originality" jdbcType="VARCHAR"/>
+        <result property="hasAct" column="has_act" jdbcType="VARCHAR"/>
+        <result property="day" column="day" jdbcType="VARCHAR"/>
+        <result property="openCid" column="open_cid" jdbcType="INTEGER"/>
+        <result property="ordersLast30Days" column="orders_last_30_days" jdbcType="INTEGER"/>
+        <result property="tjplatform" column="tjplatform" jdbcType="VARCHAR"/>
+        <result property="primaryClass" column="primary_class" jdbcType="VARCHAR"/>
+        <result property="secondaryClass" column="secondary_class" jdbcType="VARCHAR"/>
+        <result property="subnick" column="subnick" jdbcType="VARCHAR"/>
+        <result property="isSubuserOrder" column="is_subuser_order" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryByNick" resultMap="OrderSearchTradeMap">
+        select *
+        from ${tableName}
+        where nick = #{nick}
+        order by createDate desc limit 1
+    </select>
+    <select id="queryBySellerId" resultMap="OrderSearchTradeMap">
+        select *
+        from ${tableName}
+        where user_id = #{sellerId}
+        order by createDate desc limit 1
+    </select>
+    <select id="queryListBySellerNick" resultMap="OrderSearchTradeMap">
+        select *
+        from ${tableName}
+        where nick = #{sellerNick}
+        order by createdate desc
+    </select>
+    <select id="queryListBySellerId" resultMap="OrderSearchTradeMap">
+        select *
+        from ${tableName}
+        where user_id = #{sellerId}
+        order by createdate desc
+    </select>
+
+</mapper>
+

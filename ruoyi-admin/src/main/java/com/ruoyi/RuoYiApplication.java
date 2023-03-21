@@ -9,11 +9,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * 
  * @author ruoyi
  */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-public class RuoYiApplication
-{
-    public static void main(String[] args)
-    {
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class},
+    scanBasePackages = {"cn.loveapp.operation", "com.ruoyi"})
+public class RuoYiApplication {
+    public static void main(String[] args) {
         SpringApplication.run(RuoYiApplication.class, args);
     }
 }

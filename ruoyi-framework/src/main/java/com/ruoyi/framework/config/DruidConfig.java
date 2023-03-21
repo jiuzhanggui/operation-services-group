@@ -40,14 +40,14 @@ public class DruidConfig
         return druidProperties.dataSource(dataSource);
     }
 
-    @Bean
-    @ConfigurationProperties("spring.datasource.druid.slave")
-    @ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
-    public DataSource slaveDataSource(DruidProperties druidProperties)
-    {
-        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
-        return druidProperties.dataSource(dataSource);
-    }
+//    @Bean
+//    @ConfigurationProperties("spring.datasource.druid.slave")
+//    @ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
+//    public DataSource slaveDataSource(DruidProperties druidProperties)
+//    {
+//        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+//        return druidProperties.dataSource(dataSource);
+//    }
 
     /**
      * 梦想库数据源
@@ -85,15 +85,15 @@ public class DruidConfig
     {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
-        setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
+//        setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
         setDataSource(targetDataSources, DataSourceType.DREAM_DATA_SOURCE.name(), "dreamDataSource");
         setDataSource(targetDataSources, DataSourceType.TRADE_DATA_SOURCE.name(), "tradeDataSource");
         return new DynamicDataSource(masterDataSource, targetDataSources);
     }
-    
+
     /**
      * 设置数据源
-     * 
+     *
      * @param targetDataSources 备选数据源集合
      * @param sourceName 数据源名称
      * @param beanName bean名称

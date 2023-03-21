@@ -23,7 +23,8 @@
         <swagger.version>3.0.0</swagger.version>
         <kaptcha.version>2.3.3</kaptcha.version>
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
-        <fastjson.version>2.0.23</fastjson.version>
+        <fastjson2.version>2.0.23</fastjson2.version>
+        <fastjson.version>1.2.58_fix</fastjson.version>
         <oshi.version>6.4.0</oshi.version>
         <commons.io.version>2.11.0</commons.io.version>
         <commons.collections.version>3.2.2</commons.collections.version>
@@ -31,6 +32,8 @@
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
         <apollo.version>1.5.1</apollo.version>
+        <lombok.version>1.18.22</lombok.version>
+        <mybatis.version>3.5.3.1</mybatis.version>
     </properties>
 	
     <!-- 依赖声明 -->
@@ -58,6 +61,12 @@
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>${bitwalker.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
             </dependency>
 
             <!-- pagehelper 分页插件 -->
@@ -119,6 +128,12 @@
             <dependency>
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
 
@@ -171,11 +186,38 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!--爱用中台运——公共模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>operation-common</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
+            <!--爱用中台运维——交易模块-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>operation-trade</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!--apollo-->
             <dependency>
                 <groupId>com.ctrip.framework.apollo</groupId>
                 <artifactId>apollo-client</artifactId>
                 <version>${apollo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.58_fix</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
             </dependency>
 
         </dependencies>
@@ -189,6 +231,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>operation-common</module>
+        <module>operation-trade</module>
     </modules>
     <packaging>pom</packaging>
 

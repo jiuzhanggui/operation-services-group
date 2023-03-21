@@ -61,6 +61,12 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>operation-trade</artifactId>
+        </dependency>
+
+
         <!--apollo-->
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
