@@ -10,8 +10,8 @@ import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.operation.common.constant.CommonPlatformConstants;
 
-import cn.loveapp.operation.trade.dao.OrderSearchTradeDao;
-import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDto;
+import cn.loveapp.operation.trade.dao.mysql.OrderSearchTradeDao;
+import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDTO;
 import cn.loveapp.operation.trade.entity.OrderSearchTrade;
 import cn.loveapp.operation.trade.service.OrderSearchTradeService;
 
@@ -47,8 +47,8 @@ public class OrderSearchTradeServiceImpl implements OrderSearchTradeService {
     }
 
     @Override
-    public List<OrderSearchTradeInfoDto> getAllOrderSearchBySellerNick(String sellerNick, String sellerId,
-        String storeId, String appName) {
+    public List<OrderSearchTradeInfoDTO> getAllOrderSearchBySellerNick(String sellerNick, String sellerId,
+                                                                       String storeId, String appName) {
         // 抖店没有存nick
         List<OrderSearchTrade> orderSearchTrades = null;
         if (CommonPlatformConstants.PLATFORM_DOUDIAN.equals(storeId)) {
@@ -60,9 +60,9 @@ public class OrderSearchTradeServiceImpl implements OrderSearchTradeService {
         if (orderSearchTrades == null) {
             return null;
         }
-        List<OrderSearchTradeInfoDto> OrderSearchTradeInfoDtoList =
-            orderSearchTrades.stream().map(OrderSearchTradeInfoDto::of).collect(Collectors.toList());
-        return OrderSearchTradeInfoDtoList;
+        List<OrderSearchTradeInfoDTO> orderSearchTradeInfoDTOList =
+            orderSearchTrades.stream().map(OrderSearchTradeInfoDTO::of).collect(Collectors.toList());
+        return orderSearchTradeInfoDTOList;
     }
 
     /**

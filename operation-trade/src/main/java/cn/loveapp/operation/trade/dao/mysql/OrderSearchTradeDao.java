@@ -1,4 +1,4 @@
-package cn.loveapp.operation.trade.dao;
+package cn.loveapp.operation.trade.dao.mysql;
 
 import java.util.List;
 

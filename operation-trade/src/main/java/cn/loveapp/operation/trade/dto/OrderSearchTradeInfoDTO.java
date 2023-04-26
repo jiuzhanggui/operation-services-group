@@ -13,7 +13,7 @@ import lombok.Data;
  * @Description: 订购记录基本信息数据传输对象
  */
 @Data
-public class OrderSearchTradeInfoDto {
+public class OrderSearchTradeInfoDTO {
 
     /**
      * 用户数字ID
@@ -154,8 +154,8 @@ public class OrderSearchTradeInfoDto {
      * @param orderSearchTrade
      * @return
      */
-    public static OrderSearchTradeInfoDto of(OrderSearchTrade orderSearchTrade) {
-        OrderSearchTradeInfoDto orderSearchTradeInfoDto = new OrderSearchTradeInfoDto();
+    public static OrderSearchTradeInfoDTO of(OrderSearchTrade orderSearchTrade) {
+        OrderSearchTradeInfoDTO orderSearchTradeInfoDto = new OrderSearchTradeInfoDTO();
         BeanUtils.copyProperties(orderSearchTrade, orderSearchTradeInfoDto);
         return orderSearchTradeInfoDto;
     }

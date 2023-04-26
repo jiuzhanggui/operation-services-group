@@ -2,7 +2,7 @@ package cn.loveapp.operation.trade.service;
 
 import java.util.List;
 
-import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDto;
+import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDTO;
 import cn.loveapp.operation.trade.entity.OrderSearchTrade;
 
 /**
@@ -33,7 +33,7 @@ public interface OrderSearchTradeService {
      * @param appName
      * @return
      */
-    List<OrderSearchTradeInfoDto> getAllOrderSearchBySellerNick(String sellerNick, String sellerId, String storeId,
-        String appName);
+    List<OrderSearchTradeInfoDTO> getAllOrderSearchBySellerNick(String sellerNick, String sellerId, String storeId,
+                                                                String appName);
 
 }

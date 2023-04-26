@@ -8,7 +8,7 @@ import com.ruoyi.operation.common.dto.request.UserFullInfoRequest;
 import com.ruoyi.operation.common.utils.HttpUtil;
 
 import cn.loveapp.operation.trade.config.RequestAddressConfig;
-import cn.loveapp.operation.trade.dto.UserFullInfoDto;
+import cn.loveapp.operation.trade.dto.UserFullInfoDTO;
 import cn.loveapp.operation.trade.service.UserInfoService;
 
 /**
@@ -22,7 +22,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private RequestAddressConfig requestAddressConfig;
 
     @Override
-    public UserFullInfoDto getUserFullInfo(String sellerNick, String sellerId, String platformId, String appName) {
+    public UserFullInfoDTO getUserFullInfo(String sellerNick, String sellerId, String platformId, String appName) {
 
         UserFullInfoRequest request = new UserFullInfoRequest();
         request.setSellerNick(sellerNick);
@@ -33,7 +33,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         String responseStr = HttpUtil.urlHttp(requestAddressConfig.getUacUrl(),
             requestAddressConfig.getUacGetUserFullInfoPath(), JSON.toJSONString(request));
 
-        UserFullInfoDto userFullInfoDto = JSON.parseObject(responseStr, UserFullInfoDto.class);
+        UserFullInfoDTO userFullInfoDto = JSON.parseObject(responseStr, UserFullInfoDTO.class);
 
         return userFullInfoDto;
     }

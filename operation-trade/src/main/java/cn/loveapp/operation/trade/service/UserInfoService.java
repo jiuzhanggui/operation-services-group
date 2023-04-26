@@ -1,6 +1,6 @@
 package cn.loveapp.operation.trade.service;
 
-import cn.loveapp.operation.trade.dto.UserFullInfoDto;
+import cn.loveapp.operation.trade.dto.UserFullInfoDTO;
 
 /**
  * @author xujianhu
@@ -18,5 +18,5 @@ public interface UserInfoService {
      * @param appName
      * @return
      */
-    UserFullInfoDto getUserFullInfo(String sellerNick, String sellerId, String platformId, String appName);
+    UserFullInfoDTO getUserFullInfo(String sellerNick, String sellerId, String platformId, String appName);
 }

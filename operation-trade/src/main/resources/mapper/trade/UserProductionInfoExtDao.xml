@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.loveapp.operation.trade.dao.mysql.UserProductionInfoExtDao">
+
+    <resultMap type="cn.loveapp.operation.trade.entity.UserProductionInfoExt" id="AyOrderPullRecordMap">
+        <result property="id" column="id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="sellerNick" column="seller_nick"/>
+        <result property="storeId" column="store_id"/>
+        <result property="corpId" column="corp_id"/>
+        <result property="dbStatus" column="db_status"/>
+        <result property="pullStatus" column="pull_status"/>
+        <result property="topStatus" column="top_status"/>
+        <result property="apiStatus" column="api_status"/>
+        <result property="topTradeCount" column="top_trade_count"/>
+        <result property="sessionStatus" column="session_status"/>
+        <result property="downgradeTag" column="downgrade_tag"/>
+        <result property="dbId" column="db_id"/>
+        <result property="searchdbId" column="searchdb_id"/>
+        <result property="listId" column="list_id"/>
+        <result property="grayLevel" column="gray_level"/>
+        <result property="pullStartDateTime" column="pull_start_datetime"/>
+        <result property="pullEndDateTime" column="pull_end_datetime"/>
+        <result property="pullEndPoint" column="pull_end_point"/>
+        <result property="openedAppNames" column="opened_app_names"/>
+        <result property="memberId" column="member_id"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="tablename">
+        user_productinfo_trade_ext
+    </sql>
+
+    <sql id="fields">
+        id
+        , seller_id, seller_nick, store_id, corp_id, db_status, top_status,top_trade_count, api_status, downgrade_tag,
+	  list_id,pull_status,db_id, searchdb_id, gmt_create, gmt_modified, session_status, gray_level, pull_start_datetime,
+	  pull_end_datetime, pull_end_point, opened_app_names, member_id
+    </sql>
+
+    <sql id="wxvideoshopIncrementGetRespfields">
+        id
+        , seller_id, seller_nick, store_id, pull_end_datetime
+    </sql>
+
+    <select id="queryListBySellerNick" resultMap="AyOrderPullRecordMap">
+        select
+        <include refid="fields"/>
+        from
+        <include refid="tablename"/>
+        where seller_nick = #{sellerNick} and store_id = #{storeId}
+    </select>
+</mapper>

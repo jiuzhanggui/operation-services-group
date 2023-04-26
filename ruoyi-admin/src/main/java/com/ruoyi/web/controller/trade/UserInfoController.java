@@ -13,12 +13,17 @@ import com.ruoyi.operation.common.constant.ResponseConstant;
 import com.ruoyi.operation.common.dto.request.CommonRequest;
 import com.ruoyi.operation.common.web.CommonApiResponse;
 
-import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDto;
-import cn.loveapp.operation.trade.dto.UserFullInfoDto;
+import cn.loveapp.operation.trade.dto.AyTradeOpenUserLogDTO;
+import cn.loveapp.operation.trade.dto.OrderSearchTradeInfoDTO;
+import cn.loveapp.operation.trade.dto.UserFullInfoDTO;
+import cn.loveapp.operation.trade.dto.UserProductionInfoExtDTO;
 import cn.loveapp.operation.trade.dto.request.GetUserProductInfoRequest;
+import cn.loveapp.operation.trade.service.AyTradeOpenUserLogService;
 import cn.loveapp.operation.trade.service.OrderSearchTradeService;
 import cn.loveapp.operation.trade.service.UserInfoService;
+import cn.loveapp.operation.trade.service.UserProductionInfoExtService;
 import cn.loveapp.operation.trade.utils.RequestParamUtil;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @author xujianhu
@@ -35,18 +40,25 @@ public class UserInfoController {
     @Autowired
     private OrderSearchTradeService orderSearchTradeService;
 
+    @Autowired
+    private UserProductionInfoExtService userProductionInfoExtService;
+
+    @Autowired
+    private AyTradeOpenUserLogService ayTradeOpenUserLogService;
+
+    @ApiOperation(value = "获取用户信息列表")
     @RequestMapping(value = "/userProductInfo.list.get")
-    public CommonApiResponse<List<UserFullInfoDto>> getUserProductInfo(@RequestBody GetUserProductInfoRequest request) {
+    public CommonApiResponse<List<UserFullInfoDTO>> getUserProductInfo(@RequestBody GetUserProductInfoRequest request) {
         if (StringUtils.isEmpty(request.getSellerNick())) {
             return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
                 ResponseConstant.PARAMSE_RROR.getMessage());
         }
-        // 入参处理
+        // 处理请求参数(去空格)
         RequestParamUtil.checkoutUserInfoRequestParams(request);
 
-        UserFullInfoDto userFullInfoDto = userInfoService.getUserFullInfo(request.getSellerNick(), null,
+        UserFullInfoDTO userFullInfoDto = userInfoService.getUserFullInfo(request.getSellerNick(), null,
             request.getPlatformId(), request.getAppName());
-        List<UserFullInfoDto> params = new ArrayList<>();
+        List<UserFullInfoDTO> params = new ArrayList<>();
 
         // 如果没查到直接返回
         if (userFullInfoDto == null) {
@@ -62,21 +74,54 @@ public class UserInfoController {
         return CommonApiResponse.success(params);
     }
 
+    @ApiOperation(value = "获取订购记录列表")
     @RequestMapping("/orderSearchInfo.list.get")
-    public CommonApiResponse<List<OrderSearchTradeInfoDto>> getOrderSearchInfo(@RequestBody CommonRequest request) {
+    public CommonApiResponse<List<OrderSearchTradeInfoDTO>> getOrderSearchInfo(@RequestBody CommonRequest request) {
         if (StringUtils.isEmpty(request.getSellerNick())) {
             return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
                 ResponseConstant.PARAMSE_RROR.getMessage());
         }
 
-        // 入参处理
+        // 处理请求参数(去空格)
         RequestParamUtil.checkoutUserInfoRequestParams(request);
 
-        List<OrderSearchTradeInfoDto> orderSearchTradeInfoDtoList =
+        List<OrderSearchTradeInfoDTO> orderSearchTradeInfoDTOList =
             orderSearchTradeService.getAllOrderSearchBySellerNick(request.getSellerNick(), request.getSellerId(),
                 request.getPlatformId(), request.getAppName());
 
-        return CommonApiResponse.success(orderSearchTradeInfoDtoList);
+        return CommonApiResponse.success(orderSearchTradeInfoDTOList);
+    }
+
+    @ApiOperation(value = "获取订购记录列表")
+    @RequestMapping("/extInfo.list.get")
+    public CommonApiResponse<List<UserProductionInfoExtDTO>> getExtUserInfo(@RequestBody CommonRequest request) {
+        if (StringUtils.isEmpty(request.getSellerNick())) {
+            return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
+                ResponseConstant.PARAMSE_RROR.getMessage());
+        }
+
+        // 处理请求参数(去空格)
+        RequestParamUtil.checkoutUserInfoRequestParams(request);
+        String sellerNick = request.getSellerNick();
+        String platformId = request.getPlatformId();
+
+        return CommonApiResponse.success(userProductionInfoExtService.queryListBySellerNick(sellerNick, platformId));
+    }
+
+    @ApiOperation(value = "获取开户记录日志列表")
+    @RequestMapping("/openUserInfoLog.list.get")
+    public CommonApiResponse<List<AyTradeOpenUserLogDTO>> getUserOpenUserLogInfo(@RequestBody CommonRequest request) {
+
+        if (StringUtils.isEmpty(request.getSellerNick())) {
+            return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
+                ResponseConstant.PARAMSE_RROR.getMessage());
+        }
+
+        // 处理请求参数(去空格)
+        RequestParamUtil.checkoutUserInfoRequestParams(request);
+        String sellerNick = request.getSellerNick();
+
+        return CommonApiResponse.success(ayTradeOpenUserLogService.getAllOpenUserLogBySellerNick(sellerNick));
     }
 
     /**

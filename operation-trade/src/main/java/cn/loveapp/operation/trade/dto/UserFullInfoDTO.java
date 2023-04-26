@@ -10,7 +10,7 @@ import lombok.Data;
  * @Description: 用户信息数据传输对象
  */
 @Data
-public class UserFullInfoDto {
+public class UserFullInfoDTO {
     /**
      * 用户数字ID
      */
