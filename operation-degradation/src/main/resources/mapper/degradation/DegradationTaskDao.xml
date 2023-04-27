@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.loveapp.operation.degradation.dao.mysql.DegradationTaskDao">
+
+    <resultMap type="cn.loveapp.operation.degradation.entity.DegradationTask" id="DegradationTaskMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="configurationParameter" column="configuration_parameter" jdbcType="VARCHAR"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="switchStatus" column="switch_status" jdbcType="VARCHAR"/>
+        <result property="timerStatus" column="timer_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="tableName">
+        degradation_task
+    </sql>
+
+    <select id="findAll" resultMap="DegradationTaskMap">
+        select *
+        from
+        <include refid="tableName"></include>
+        <where>
+            <if test="name != null and name !=''">
+                name like concat('%', #{name}, '%')
+            </if>
+        </where>
+        limit #{pageable.page}, #{pageable.size}
+    </select>
+
+    <!--查询记录总数-->
+    <select id="queryTotal" resultType="java.lang.Integer">
+        select count(*)
+        from degradation_task
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--查询-->
+    <select id="queryByName" resultMap="DegradationTaskMap">
+        select id,
+               name,
+               description,
+               configuration_parameter,
+               start_time,
+               end_Time,
+               switch_status,
+               timer_status
+        from degradation_task
+        where name = #{name}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into degradation_task(name, description, configuration_parameter,
+                                     start_time, end_time, switch_status, timer_status)
+        values (#{name}, #{description}, #{configurationParameter},
+                #{startTime}, #{endTime},
+                #{switchStatus}, #{timerStatus})
+    </insert>
+
+    <!--通过name修改数据-->
+    <update id="updateByName">
+        update degradation_task
+        <set>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="configurationParameter != null and configurationParameter != ''">
+                configuration_parameter = #{configurationParameter},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="switchStatus != null ">
+                switch_status = #{switchStatus},
+            </if>
+        </set>
+        where name = #{name}
+    </update>
+    <update id="updateTimer">
+        update
+        <include refid="tableName"></include>
+        <set>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_Time = #{endTime},
+            </if>
+        </set>
+        where name = #{name}
+    </update>
+
+    <!--通过任务名删除-->
+    <delete id="deleteByName">
+        delete
+        from degradation_task
+        where name = #{name}
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.loveapp.operation.degradation.dao.mysql.DegradationTaskLogDao">
+
+	<resultMap type="cn.loveapp.operation.degradation.entity.DegradationTaskLog" id="DegradationTaskLogMap">
+		<result property="id" column="id" jdbcType="INTEGER"/>
+		<result property="taskName" column="task_name" jdbcType="VARCHAR"/>
+		<result property="content" column="content" jdbcType="VARCHAR"/>
+		<result property="gmtCreate" column="gmt_create" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<!--通过name查询日志-->
+	<select id="queryByTaskName" resultMap="DegradationTaskLogMap">
+		select *
+		from (select task_name,
+					 content,
+					 gmt_create
+			  from degradation_task_log
+			  where task_name = #{taskName}
+			  order by gmt_create desc) as t limit #{pageable.page}, #{pageable.size}
+	</select>
+
+	<select id="queryTotal" resultType="java.lang.Integer">
+		select count(#{taskName})
+		from degradation_task_log
+		where task_name = #{taskName}
+	</select>
+
+	<!--新增所有列-->
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
+		insert into degradation_task_log(task_name, content, gmt_create)
+		values (#{taskName}, #{content}, #{gmtCreate})
+	</insert>
+
+</mapper>
+

@@ -61,9 +61,15 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!--爱用模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>operation-trade</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.loveapp.operation.degradation</groupId>
+            <artifactId>operation-degradation</artifactId>
         </dependency>
 
 
