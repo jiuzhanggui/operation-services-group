@@ -66,10 +66,10 @@ export default {
   data() {
     return {
       userInfo: {
-        sellerNick: '路口的明天',
-        tid: '3245487375663460955',
-        platformId: '淘宝',
-        appName: '交易',
+        sellerNick: '',
+        tid: '',
+        platformId: 'TAO',
+        appName: 'trade',
       },
       rules: {
         sellerNick: [{

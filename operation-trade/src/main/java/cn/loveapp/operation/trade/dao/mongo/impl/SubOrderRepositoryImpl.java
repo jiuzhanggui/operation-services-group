@@ -21,7 +21,7 @@ public class SubOrderRepositoryImpl extends CommonMongoDao implements SubOrderRe
 
     @Override
     protected String getCollectionName() {
-        return "tc_order";
+        return "tc_sub_order";
     }
 
     @Override

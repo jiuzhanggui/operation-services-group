@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-left: 100px; margin-right: 100px; margin-top: 25px;">
+  <div style="margin-left: 100px; margin-right: 100px; margin-top: 25px; height: 100%">
     <el-row :gutter="0" style="width:100%;">
       <el-form ref="userInfo" :model="userInfo" :rules="rules" size="medium" label-width="100px">
         <el-col :span="6">
@@ -38,7 +38,7 @@
 
     </el-row>
     <el-divider content-position="center">结果展示</el-divider>
-    <div>
+    <div style="height: 100%">
       <template v-if="sonComponentName ==='problemAnalysisResults'" >
         <ProblemAnalysisResults :userInfo="this.userInfo" :analyseType="type" />
       </template>
@@ -62,9 +62,9 @@ export default {
   data() {
     return {
       userInfo: {
-        sellerNick: '路口的明天',
-        platformId: '淘宝',
-        appName: '交易',
+        sellerNick: '',
+        platformId: 'TAO',
+        appName: 'trade',
       },
       rules: {
         sellerNick: [{

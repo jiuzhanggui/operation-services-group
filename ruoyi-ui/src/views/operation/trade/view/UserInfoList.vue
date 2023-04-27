@@ -1,22 +1,41 @@
 <template>
-  <el-tabs type="border-card">
-    <el-tab-pane>
-      <div slot="label" @click="getUserExtInfo">ext用户存单状态表</div>
-      <ExtTable ref="extParams"/>
-    </el-tab-pane>
-    <el-tab-pane label="user_productInfo用户信息表">
-      <div slot="label" @click="getUserProductInfo">user_productInfo用户信息表</div>
-      <UserProductInfoTable ref="userProductParams"></UserProductInfoTable>
-    </el-tab-pane>
-    <el-tab-pane label="order_search订购记录表">
-      <div slot="label" @click="getOrderSearchInfo">order_search订购记录表</div>
-      <OrderSearchTable ref="OrderSearchParams"/>
-    </el-tab-pane>
-    <el-tab-pane label="open_user开户操作日志表">
-      <div slot="label" @click="getOpenUserInfo">open_user开户操作日志表</div>
-      <OpenUserTable ref="openUserParams"/>
-    </el-tab-pane>
-  </el-tabs>
+  <div style="overflow: hidden; height: 100%" >
+    <el-tabs type="border-card">
+
+      <el-tab-pane>
+        <div slot="label" @click="getUserExtInfo">ext用户存单状态表</div>
+        <!--数据库展示-->
+        <!--<ExtTable ref="extParams"/>-->
+        <!--json展示-->
+        <JsonView ref="extParams"></JsonView>
+      </el-tab-pane>
+
+      <el-tab-pane label="user_productInfo用户信息表">
+        <div slot="label" @click="getUserProductInfo">user_productInfo用户信息表</div>
+        <!--json展示-->
+        <JsonView ref="userProductParams"></JsonView>
+        <!--数据库展示-->
+        <!--<UserProductInfoTable ref="userProductParams"></UserProductInfoTable>-->
+      </el-tab-pane>
+
+      <el-tab-pane label="order_search订购记录表">
+        <div slot="label" @click="getOrderSearchInfo">order_search订购记录表</div>
+        <!--json展示-->
+        <JsonView ref="orderSearchParams"></JsonView>
+        <!--数据库展示-->
+        <!--<OrderSearchTable ref="OrderSearchParams"/>-->
+      </el-tab-pane>
+
+      <el-tab-pane label="open_user开户操作日志表">
+        <div slot="label" @click="getOpenUserInfo">open_user开户操作日志表</div>
+        <!--json展示-->
+        <JsonView ref="openUserParams"></JsonView>
+        <!--数据库展示-->
+        <!--<OpenUserTable ref="openUserParams"/>-->
+      </el-tab-pane>
+
+    </el-tabs>
+  </div>
 </template>
 <script>
 import Table from "@/views/operation/trade/common/Table";
@@ -25,10 +44,18 @@ import ExtTable from "./table/ExtTable";
 import UserProductInfoTable from "@/views/operation/trade/view/table/UserProductInfoTable";
 import OrderSearchTable from "@/views/operation/trade/view/table/OrderSearchTable";
 import OpenUserTable from "@/views/operation/trade/view/table/OpenUserTable";
+import JsonView from "@/views/operation/trade/common/JsonView.vue";
+import {
+  getExInfoDataAPI,
+  getOpenUserDataAPI,
+  getOrderSearchDataAPI,
+  getUserProductDataAPI
+} from "@/api/operation/trade/userInfo";
 
 export default {
   name: "UserInfoList",
   components: {
+    JsonView,
     Table, ExtTable, UserProductInfoTable, OrderSearchTable, OpenUserTable
   },
 
@@ -63,11 +90,11 @@ export default {
         });
       } else {
 
-        // getOpenUserDataAPI(userInfo).then(res => {
-        //   let body = res.data.body;
-        //   this.userResultList = body
-        //   this.$refs.openUserParams.getData(body)
-        // })
+        getOpenUserDataAPI(userInfo).then(res => {
+          let body = res.body;
+          this.userResultList = body
+          this.$refs.openUserParams.getData(body)
+        })
       }
     },
 
@@ -83,11 +110,11 @@ export default {
           center: true
         });
       } else {
-        // getOrderSearchDataAPI(userInfo).then(res => {
-        //   let body = res.data.body;
-        //   this.userResultList = body
-        //   this.$refs.OrderSearchParams.getData(body)
-        // })
+        getOrderSearchDataAPI(userInfo).then(res => {
+          let body = res.body;
+          this.userResultList = body
+          this.$refs.orderSearchParams.getData(body)
+        })
       }
     },
 
@@ -103,11 +130,11 @@ export default {
           center: true
         });
       } else {
-        // getUserProductDataAPI(userInfo).then(res => {
-        //   let body = res.data.body;
-        //   this.userResultList = body
-        //   this.$refs.userProductParams.getData(body)
-        // })
+        getUserProductDataAPI(userInfo).then(res => {
+          let body = res.body;
+          this.userResultList = body
+          this.$refs.userProductParams.getData(body)
+        })
       }
     },
 
@@ -116,25 +143,20 @@ export default {
      */
     getUserExtInfo() {
       let userInfo = this.userInfo;
-      // 调用api获取数据
-      // getExInfoDataAPI(userInfo).then(res => {
-      //   let body = res.data.body;
-      //   this.userResultList = body
-      //   this.$refs.extParams.getData(body)
-      // })
+      getExInfoDataAPI(userInfo).then(res => {
+        let body = res.body;
+        this.userResultList = body
+        this.$refs.extParams.getData(body)
+      })
 
-      // 模拟数据
-      // let body = res.data.body;
-      // this.userResultList = body
 
-      setTimeout(() => {
-        let user = new Object({"sellerNick": "dcd222ding", "sellerId": "123455"});
-        let array = new Array(user);
-        this.userResultList = array
-        // 调用extParams的getData()方法
-        this.$refs.extParams.getData(array)
-      }, 0)
-
+      // setTimeout(() => {
+      //   let user = new Object({"sellerNick": "dcd222ding", "sellerId": "123455"});
+      //   let array = new Array(user);
+      //   this.userResultList = array
+      //   // 调用extParams的getData()方法
+      //   this.$refs.extParams.getData(array)
+      // }, 0)
 
 
     }

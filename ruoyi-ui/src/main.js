@@ -1,8 +1,11 @@
 import Vue from 'vue'
-
+// json展示组件
+import JsonViewer from "vue-json-viewer";
 import Cookies from 'js-cookie'
 
 import Element from 'element-ui'
+
+import 'vue-json-viewer/style.css'
 import './assets/styles/element-variables.scss'
 
 import '@/assets/styles/index.scss' // global css
@@ -61,6 +64,7 @@ Vue.component('ImagePreview', ImagePreview)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+
 DictData.install()
 
 /**
@@ -75,6 +79,7 @@ DictData.install()
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+Vue.use(JsonViewer)
 
 Vue.config.productionTip = false
 
