@@ -21,6 +21,8 @@ import cn.loveapp.operation.degradation.service.DegradationExecuteService;
 import cn.loveapp.operation.degradation.service.DegradationTaskLogService;
 import cn.loveapp.operation.degradation.service.DegradationTaskService;
 
+import java.util.Date;
+
 /**
  * @author xujianhu
  * @date 2023-04-26 17:10
@@ -125,23 +127,23 @@ public class DegradationExecuteServiceImpl implements DegradationExecuteService 
         String namespace = degradationTaskConfig.getNameSpace();
         String key = degradationTaskConfig.getKey();
 
-        OpenItemDTO openItemDTO = new OpenItemDTO();
-        openItemDTO.setKey(key);
-        openItemDTO.setDataChangeCreatedBy(opUser);
         OpenItemDTO changeBeforeItem = apolloOpenApiClient.getItem(appId, env, cluster, namespace, key);
         System.out.println(changeBeforeItem.getValue());
+
         if (DegradedStateConstant.DEGRADATION_SWITCH_OFF.equals(degradationTask.getSwitchStatus())) {
             // 开启降级
-            openItemDTO.setValue(degradationTaskConfig.getOpenStatusParameter());
+            changeBeforeItem.setValue(degradationTaskConfig.getOpenStatusParameter());
             degradationTask.setSwitchStatus(DegradedStateConstant.DEGRADATION_SWITCH_ON);
             LOGGER.info(degradationTask.getName(), "降级启动");
         } else {
             // 恢复
-            openItemDTO.setValue(degradationTaskConfig.getCloseStatusParameter());
+            changeBeforeItem.setValue(degradationTaskConfig.getCloseStatusParameter());
             degradationTask.setSwitchStatus(DegradedStateConstant.DEGRADATION_SWITCH_OFF);
             LOGGER.info(degradationTask.getName(), "降级恢复");
         }
-        apolloOpenApiClient.createOrUpdateItem(appId, env, cluster, namespace, openItemDTO);
+
+        changeBeforeItem.setDataChangeCreatedTime(new Date());
+        apolloOpenApiClient.createOrUpdateItem(appId, env, cluster, namespace, changeBeforeItem);
         // 刷新说明
         NamespaceGrayDelReleaseDTO namespaceGrayDelReleaseDTO = new NamespaceGrayDelReleaseDTO();
         namespaceGrayDelReleaseDTO.setReleaseTitle(System.currentTimeMillis() + "-release");
