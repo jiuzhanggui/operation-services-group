@@ -1,100 +1,101 @@
-<template>
-  <div style="margin: 20px 20px 0px 20px">
-    <el-form :inline="true" :model="taskInfo">
-      <el-form-item label="" prop="taskName">
-        <el-input
-          prefix-icon="el-icon-s-promotion"
-          clearable
-          type="name"
-          placeholder="任务名称"
-          v-model="name">
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="button" type="primary" @click="queryTask">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="button" type="primary" @click="addDialogController">新增</el-button>
-      </el-form-item>
-    </el-form>
-    <DegradationTable :taskList=taskList @queryTask="queryTask" />
-    <Paging ref="paging" :total = nowTotal @getPageRequest = getPageRequest />
-    <template v-if="isOpenAddDialog">
-      <AddDegradation @addDialogController=addDialogController @queryTask="queryTask" />
-    </template>
-  </div>
-</template>
+<!--<template>-->
+<!--  <div style="margin: 20px 20px 0px 20px">-->
+<!--    <el-form :inline="true" :model="taskInfo">-->
+<!--      <el-form-item label="" prop="taskName">-->
+<!--        <el-input-->
+<!--          prefix-icon="el-icon-s-promotion"-->
+<!--          clearable-->
+<!--          type="name"-->
+<!--          placeholder="任务名称"-->
+<!--          v-model="name">-->
+<!--        </el-input>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button class="button" type="primary" @click="queryTask">查询</el-button>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item>-->
+<!--        <el-button class="button" type="primary" @click="addDialogController">新增</el-button>-->
+<!--      </el-form-item>-->
+<!--    </el-form>-->
+<!--    <DegradationTable :taskList=taskList @queryTask="queryTask" />-->
+<!--    <Paging ref="paging" :total = nowTotal @getPageRequest = getPageRequest />-->
+<!--    <template v-if="isOpenAddDialog">-->
+<!--      <AddDegradation @addDialogController=addDialogController @queryTask="queryTask" />-->
+<!--    </template>-->
+<!--  </div>-->
+<!--</template>-->
 
-<script>
-// import {getDegradationTaskListAPI} from "../../api/degradationApi";
-import Paging from "@/views/operation/trade/common/Paging";
-import AddDegradation from "@/views/operation/trade/view/AddDegradation";
-import DegradationTable from "@/views/operation/trade/view/table/DegradationTable"
+<!--<script>-->
+<!--// import {getDegradationTaskListAPI} from "../../api/degradationApi";-->
+<!--import Paging from "@/views/operation/trade/common/Paging";-->
+<!--import AddDegradation from "@/views/operation/trade/view/AddDegradation";-->
+<!--import DegradationTable from "@/views/operation/trade/view/table/DegradationTable"-->
+<!--import {getDegradationTaskListAPI} from "@/api/operation/degradation/degrade";-->
 
-export default {
-  name: "Degradation",
-  components: {DegradationTable, AddDegradation,Paging},
-  data() {
-    return {
-      taskList:{},
-      name:'',
-      taskInfo: {
-        taskName: '',
-        startIndex: 0,
-        pageSize: 0,
-      },
-      nowTotal: 0,
-      isOpenAddDialog: false
-    }
-  },
+<!--export default {-->
+<!--  name: "Degradation",-->
+<!--  components: {DegradationTable, AddDegradation,Paging},-->
+<!--  data() {-->
+<!--    return {-->
+<!--      taskList:{},-->
+<!--      name:'',-->
+<!--      taskInfo: {-->
+<!--        taskName: '',-->
+<!--        startIndex: 0,-->
+<!--        pageSize: 0,-->
+<!--      },-->
+<!--      nowTotal: 0,-->
+<!--      isOpenAddDialog: false-->
+<!--    }-->
+<!--  },-->
 
-  methods: {
-    // 获取分页信息
-    getPageRequest(res) {
-      let pageRequest = JSON.parse(res);
-      this.taskInfo.startIndex = pageRequest.startIndex
-      this.taskInfo.pageSize = pageRequest.pageSize
-      this.getTaskList()
-    },
+<!--  methods: {-->
+<!--    // 获取分页信息-->
+<!--    getPageRequest(res) {-->
+<!--      let pageRequest = JSON.parse(res);-->
+<!--      this.taskInfo.startIndex = pageRequest.startIndex-->
+<!--      this.taskInfo.pageSize = pageRequest.pageSize-->
+<!--      this.getTaskList()-->
+<!--    },-->
 
-    queryTask(req) {
-      this.taskInfo.taskName = this.name
-      // this.taskInfo.startIndex = 0;
-      if (req === 0) {
-        let number = Math.trunc(Math.floor(this.taskInfo.startIndex/this.taskInfo.pageSize));
-        if (number - 1 < 0) {
-          this.taskInfo.startIndex = 0
-        } else {
-          this.taskInfo.startIndex = number - 1
-        }
-
-
-        this.$refs.paging.clearCurrentPage(true)
-      }else {
-        this.$refs.paging.clearCurrentPage()
-      }
-      // this.$refs.paging.clearCurrentPage()
-      this.getTaskList()
-    },
-
-    getTaskList() {
-      // let taskInfo = this.taskInfo
-      // getDegradationTaskListAPI(taskInfo).then(res => {
-      //   this.taskList = res.data.body.degradationTaskList
-      //   this.nowTotal = res.data.body.total
-      // })
-    },
-
-    // 控制添加弹窗
-    addDialogController() {
-      this.isOpenAddDialog = !this.isOpenAddDialog
-    },
-  }
-}
+<!--    queryTask(req) {-->
+<!--      this.taskInfo.taskName = this.name-->
+<!--      // this.taskInfo.startIndex = 0;-->
+<!--      if (req === 0) {-->
+<!--        let number = Math.trunc(Math.floor(this.taskInfo.startIndex/this.taskInfo.pageSize));-->
+<!--        if (number - 1 < 0) {-->
+<!--          this.taskInfo.startIndex = 0-->
+<!--        } else {-->
+<!--          this.taskInfo.startIndex = number - 1-->
+<!--        }-->
 
 
-</script>
+<!--        this.$refs.paging.clearCurrentPage(true)-->
+<!--      }else {-->
+<!--        this.$refs.paging.clearCurrentPage()-->
+<!--      }-->
+<!--      // this.$refs.paging.clearCurrentPage()-->
+<!--      this.getTaskList()-->
+<!--    },-->
 
-<style scoped>
+<!--    getTaskList() {-->
+<!--      let taskInfo = this.taskInfo-->
+<!--      getDegradationTaskListAPI(taskInfo).then(res => {-->
+<!--        this.taskList = res.data.body.degradationTaskList-->
+<!--        this.nowTotal = res.data.body.total-->
+<!--      })-->
+<!--    },-->
 
-</style>
+<!--    // 控制添加弹窗-->
+<!--    addDialogController() {-->
+<!--      this.isOpenAddDialog = !this.isOpenAddDialog-->
+<!--    },-->
+<!--  }-->
+<!--}-->
+
+
+<!--</script>-->
+
+<!--<style scoped>-->
+
+<!--</style>-->
