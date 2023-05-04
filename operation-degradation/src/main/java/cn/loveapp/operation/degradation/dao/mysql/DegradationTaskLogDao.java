@@ -1,6 +1,7 @@
 package cn.loveapp.operation.degradation.dao.mysql;
 
 import cn.loveapp.operation.degradation.entity.DegradationTaskLog;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface DegradationTaskLogDao {
      * @param pageable
      * @return
      */
-    List<DegradationTaskLog> queryByTaskName(String taskName, Pageable pageable);
+    List<DegradationTaskLog> queryByTaskName(@Param("taskName")String taskName, @Param("pageable") Pageable pageable);
 
     /**
      * 新增数据

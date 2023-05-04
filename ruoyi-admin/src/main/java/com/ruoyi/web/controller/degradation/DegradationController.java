@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import cn.loveapp.operation.degradation.dto.response.DegradationLogListResponse;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,6 @@ import cn.loveapp.operation.degradation.service.DegradationTaskService;
 public class DegradationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DegradationController.class);
-
     private static final String OPEN_TASK_SUFFIX = "-on";
     private static final String CLOSE_TASK_SUFFIX = "-off";
 
@@ -64,9 +66,9 @@ public class DegradationController {
      */
     @RequestMapping(value = "/degradation.list.get", method = RequestMethod.POST)
     @ResponseBody
-    public CommonApiResponse<DegradationListResponse> taskList(@RequestBody DegradationListGetRequest request) {
+    public AjaxResult taskList(@RequestBody DegradationListGetRequest request) {
         Pageable pageRequest = PageRequest.of(request.getStartIndex(), request.getPageSize());
-        return CommonApiResponse
+        return AjaxResult
             .success(degradationTaskService.pageDegradationTask(request.getTaskName(), pageRequest));
     }
 
@@ -77,7 +79,7 @@ public class DegradationController {
      * @return
      */
     @RequestMapping(value = "/degradation.task.add", method = RequestMethod.POST)
-    public CommonApiResponse<String> addTask(@RequestBody DegradationAddRequest request) {
+    public AjaxResult addTask(@RequestBody DegradationAddRequest request) {
         DegradationTask.DegradationTaskParameter degradationTaskParameter =
             DegradationTask.DegradationTaskParameter.of(request);
         String degradationConfigConfigInfo = JSON.toJSONString(degradationTaskParameter);
@@ -90,9 +92,9 @@ public class DegradationController {
             degradationTask.setTimerStatus(DegradedStateConstant.TIMER_STATUS_NULL);
             degradationTask.setConfigurationParameter(degradationConfigConfigInfo);
             degradationTaskService.setDegradationTask(degradationTask);
-            return CommonApiResponse.success("添加成功");
+            return AjaxResult.success("添加成功");
         } else {
-            return CommonApiResponse.of(CommonApiStatus.Failed.code(), "任务已存在");
+            return AjaxResult.warn("任务已存在");
         }
     }
 
@@ -103,11 +105,11 @@ public class DegradationController {
      * @return
      */
     @RequestMapping("/degradation.task.delete")
-    public CommonApiResponse<String> deleteTask(@RequestBody BaseDegradationRequest request) {
+    public AjaxResult deleteTask(@RequestBody BaseDegradationRequest request) {
         if (degradationTaskService.removeDegradationTask(request.getTaskName()) > 0) {
-            return CommonApiResponse.success("删除成功");
+            return AjaxResult.success("删除成功");
         } else {
-            return CommonApiResponse.of(CommonApiStatus.ServerError.code(), "删除失败");
+            return AjaxResult.warn("删除失败");
         }
     }
 
@@ -118,7 +120,7 @@ public class DegradationController {
      * @return
      */
     @RequestMapping(value = "/degradation.task.control", method = RequestMethod.POST)
-    public CommonApiResponse<DegradationControlResponse>
+    public AjaxResult
         manualControlDegradation(@RequestBody DegradationControlRequest request) {
         // 查询当前任务状态信息
         DegradationTask degradationSchemeInfo = degradationTaskService.getDegradationTask(request.getTaskName());
@@ -137,16 +139,16 @@ public class DegradationController {
             // }
             DegradationTask stateInfo = degradationExecuteService.executeDegradationTask(degradationSchemeInfo);
             if (stateInfo == null) {
-                return CommonApiResponse.of(CommonApiStatus.Failed.code(), "降级验证未通过，请检查参数");
+                return AjaxResult.warn("降级验证未通过，请检查参数");
             } else {
                 DegradationControlResponse degradationControlResponse = new DegradationControlResponse();
                 degradationControlResponse.setTaskName(stateInfo.getName());
                 degradationControlResponse.setSwitchStatus(stateInfo.getSwitchStatus());
-                return CommonApiResponse.success(degradationControlResponse);
+                return AjaxResult.success(degradationControlResponse);
             }
 
         } else {
-            return CommonApiResponse.of(CommonApiStatus.Failed.code(), "任务已经开启");
+            return AjaxResult.warn("任务已经开启");
         }
     }
 
@@ -157,7 +159,7 @@ public class DegradationController {
      * @return
      */
     @RequestMapping(value = "/degradation.task.timer", method = RequestMethod.POST)
-    public CommonApiResponse<String> settingDegradeTask(@RequestBody DegradationTimerRequest degradationTimerRequest) {
+    public AjaxResult settingDegradeTask(@RequestBody DegradationTimerRequest degradationTimerRequest) {
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DegradationTask degradationTaskInfo =
@@ -168,7 +170,7 @@ public class DegradationController {
             degradationTask.getDDegradationTaskConfig(degradationTaskInfo.getConfigurationParameter());
 
         if (DegradedStateConstant.CONFIGURATION_INTERFACE_MYSQL.equals(configParameter.getConfigurationInterface())) {
-            return CommonApiResponse.of(CommonApiStatus.ServerError.code(), "mysql无法开启定时任务，请手动开启");
+            return AjaxResult.error(CommonApiStatus.ServerError.code(), "mysql无法开启定时任务，请手动开启");
         } else {
             if (StringUtil.isNotEmpty(degradationTimerRequest.getStartTime())
                 && StringUtil.isNotEmpty(degradationTimerRequest.getEndTime())) {
@@ -181,7 +183,7 @@ public class DegradationController {
                         .setStartTime(LocalDateTime.parse(degradationTimerRequest.getStartTime(), dateFormat));
                 } else {
                     LOGGER.error("连接时间小于当前时间");
-                    return CommonApiResponse.of(CommonApiStatus.Failed.code(), "定时任务开始时间小于当前时间");
+                    return AjaxResult.warn("定时任务开始时间小于当前时间");
                 }
 
                 if (Timestamp.valueOf(degradationTimerRequest.getEndTime()).getTime() > Timestamp
@@ -193,7 +195,7 @@ public class DegradationController {
                         .setEndTime(LocalDateTime.parse(degradationTimerRequest.getEndTime(), dateFormat));
                 } else {
                     LOGGER.info("结束任务时间小于开始任务时间");
-                    return CommonApiResponse.of(CommonApiStatus.Failed.code(), "定时任务结束时间大于任务开始时间");
+                    return AjaxResult.warn("定时任务结束时间大于任务开始时间");
                 }
             } else {
                 if (StringUtil.isNotEmpty(degradationTimerRequest.getStartTime())) {
@@ -204,7 +206,7 @@ public class DegradationController {
                         degradationTaskInfo
                             .setStartTime(LocalDateTime.parse(degradationTimerRequest.getStartTime(), dateFormat));
                     } else {
-                        return CommonApiResponse.of(CommonApiStatus.Failed.code(), "任务已经开启，无需定时开始");
+                        return AjaxResult.warn("任务已经开启，无需定时开始");
                     }
                 }
                 if (StringUtil.isNotEmpty(degradationTimerRequest.getEndTime())) {
@@ -215,13 +217,13 @@ public class DegradationController {
                         degradationTaskInfo
                             .setStartTime(LocalDateTime.parse(degradationTimerRequest.getEndTime(), dateFormat));
                     } else {
-                        return CommonApiResponse.of(CommonApiStatus.Failed.code(), "任务已经关闭，无需定时关闭");
+                        return AjaxResult.warn("任务已经关闭，无需定时关闭");
                     }
                 }
             }
         }
         degradationTaskService.updateDegradationTask(degradationTaskInfo);
-        return CommonApiResponse.success("定时任务开启");
+        return AjaxResult.success("定时任务开启");
     }
 
     /**
@@ -231,7 +233,7 @@ public class DegradationController {
      * @return
      */
     @RequestMapping(value = "/degradation.task.canceltimer", method = RequestMethod.POST)
-    public CommonApiResponse<String> cancelDegradeTask(@RequestBody DegradationTimerRequest degradationTimerRequest) {
+    public AjaxResult cancelDegradeTask(@RequestBody DegradationTimerRequest degradationTimerRequest) {
 
         List<String> taskList = degradationTaskSchedulerService.getTaskList();
         String taskName = degradationTimerRequest.getTaskName();
@@ -251,9 +253,25 @@ public class DegradationController {
             // 取消任务的同时将保存的定时时间设为当前时间
             degradationTaskService.updateDegradationTimer(taskName, LocalDateTime.now(), LocalDateTime.now());
 
-            return CommonApiResponse.success("取消定时任务成功");
+            return AjaxResult.success("取消定时任务成功");
         } else {
-            return CommonApiResponse.failed(CommonApiStatus.Failed.code(), "该降级无定时任务");
+            return AjaxResult.warn("该降级无定时任务");
         }
+    }
+
+
+    /**
+     * 获取任务日志
+     *
+     * @param degradationLogListRequest
+     * @return
+     */
+    @RequestMapping(value = "/degradation.log.get", method = RequestMethod.POST)
+    public AjaxResult
+    taskLogList(@RequestBody DegradationLogListRequest degradationLogListRequest) {
+        Pageable pageRequest =
+                PageRequest.of(degradationLogListRequest.getStartIndex(), degradationLogListRequest.getPageSize());
+        return AjaxResult.success(
+                degradationTaskLogService.pageDegradationTaskLog(degradationLogListRequest.getTaskName(), pageRequest));
     }
 }

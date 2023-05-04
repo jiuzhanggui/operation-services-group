@@ -55,7 +55,7 @@
 </template>
 
 <script>
-// import {cancelDegradationTaskTimer, degradationTaskControl, degradationTaskTimer} from "../../api/degradationApi";
+import {cancelDegradationTaskTimer, degradationTaskTimer} from "@/api/operation/degradation/degrade";
 
 export default {
   name: "DegradationTimerDialog",
@@ -96,26 +96,36 @@ export default {
     },
 
     setTimedTask() {
-      // this.timedInfo.startTime = this.openTime
-      // this.timedInfo.endTime = this.closeTime
-      // degradationTaskTimer(this.timedInfo).then(res => {
-      //   console.log(res);
-      //   if (res.data.code === 200) {
-      //     this.$message({
-      //       type: 'success',
-      //       message: res.data.body,
-      //       center: true
-      //     });
-      //     this.closeDialog()
-      //     this.refresh()
-      //   } else {
-      //     this.$message({
-      //       type: 'error',
-      //       message: res.data.message,
-      //       center: true
-      //     });
-      //   }
-      // })
+
+      if (this.closeTime=== '' &&  this.openTime=== '') {
+        this.$message({
+          type: 'warning',
+          message: '开始结束时间不能都为空',
+          center: true
+        });
+        return
+      }
+
+      this.timedInfo.startTime = this.openTime
+      this.timedInfo.endTime = this.closeTime
+
+      degradationTaskTimer(this.timedInfo).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            center: true
+          });
+          this.closeDialog()
+          this.refresh()
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.msg,
+            center: true
+          });
+        }
+      })
     },
 
     getLastTime() {
@@ -123,35 +133,35 @@ export default {
     },
 
     cancelTaskTimer() {
-      // this.$confirm('取消定时任务, 是否继续?', '警告', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      //   cancelDegradationTaskTimer(this.timedInfo).then(res => {
-      //     if (res.data.code === 200) {
-      //       this.$message({
-      //         type: 'success',
-      //         message: res.data.message,
-      //         center: true
-      //       });
-      //       this.refresh()
-      //     } else {
-      //       this.$message({
-      //         type: 'error',
-      //         message: res.data.sub_message,
-      //         center: true
-      //       });
-      //     }
-      //   })
-      //
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消操作',
-      //     center: true
-      //   });
-      // })
+      this.$confirm('取消定时任务, 是否继续?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        cancelDegradationTaskTimer(this.timedInfo).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+            this.refresh()
+          } else {
+            this.$message({
+              type: 'warning',
+              message: res.msg,
+              center: true
+            });
+          }
+        })
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作',
+          center: true
+        });
+      })
 
 
     }

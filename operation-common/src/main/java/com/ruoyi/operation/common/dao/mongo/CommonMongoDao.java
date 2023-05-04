@@ -1,5 +1,7 @@
 package com.ruoyi.operation.common.dao.mongo;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import java.util.List;
+import com.ruoyi.operation.common.constant.CommonPlatformConstants;
 
 /**
  * @author xujianhu
@@ -59,5 +61,12 @@ public abstract class CommonMongoDao {
      * @return string
      */
     abstract protected String getCollectionName();
+
+    protected String handleAppName(String platformId, String appName) {
+        if (CommonPlatformConstants.PLATFORM_TAO.equals(platformId)) {
+            return null;
+        }
+        return appName;
+    }
 
 }

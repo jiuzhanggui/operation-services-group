@@ -1,5 +1,7 @@
 package cn.loveapp.operation.degradation.service.impl;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,6 @@ import cn.loveapp.operation.degradation.entity.DegradationTaskLog;
 import cn.loveapp.operation.degradation.service.DegradationExecuteService;
 import cn.loveapp.operation.degradation.service.DegradationTaskLogService;
 import cn.loveapp.operation.degradation.service.DegradationTaskService;
-
-import java.util.Date;
 
 /**
  * @author xujianhu
@@ -61,7 +61,7 @@ public class DegradationExecuteServiceImpl implements DegradationExecuteService 
         if (DegradedStateConstant.CONFIGURATION_INTERFACE_STRING_REDIS
             .equals(degradationTaskConfig.getConfigurationInterface())) {
             stateInfo =
-                executeRedisInteriorDegradationTaks(degradationTask, degradationConfiguration.getUserRedisTemplate());
+                executeRedisInteriorDegradationTaks(degradationTask, degradationConfiguration.getStringRedisTemplate());
         }
         if (DegradedStateConstant.CONFIGURATION_INTERFACE_MYSQL
             .equals(degradationTaskConfig.getConfigurationInterface())) {
@@ -128,7 +128,8 @@ public class DegradationExecuteServiceImpl implements DegradationExecuteService 
         String key = degradationTaskConfig.getKey();
 
         OpenItemDTO changeBeforeItem = apolloOpenApiClient.getItem(appId, env, cluster, namespace, key);
-        System.out.println(changeBeforeItem.getValue());
+
+        String oldValue = changeBeforeItem.getValue();
 
         if (DegradedStateConstant.DEGRADATION_SWITCH_OFF.equals(degradationTask.getSwitchStatus())) {
             // 开启降级
@@ -146,13 +147,14 @@ public class DegradationExecuteServiceImpl implements DegradationExecuteService 
         apolloOpenApiClient.createOrUpdateItem(appId, env, cluster, namespace, changeBeforeItem);
         // 刷新说明
         NamespaceGrayDelReleaseDTO namespaceGrayDelReleaseDTO = new NamespaceGrayDelReleaseDTO();
-        namespaceGrayDelReleaseDTO.setReleaseTitle(System.currentTimeMillis() + "-release");
+        namespaceGrayDelReleaseDTO.setReleaseTitle("降级配置修改: " + System.currentTimeMillis() + "-release");
         namespaceGrayDelReleaseDTO.setReleaseComment("auto release");
         namespaceGrayDelReleaseDTO.setReleasedBy(opUser);
         apolloOpenApiClient.publishNamespace(appId, env, cluster, namespace, namespaceGrayDelReleaseDTO);
 
         OpenItemDTO changeAfterItem = apolloOpenApiClient.getItem(appId, env, cluster, namespace, key);
-        if (!changeBeforeItem.getValue().equals(changeAfterItem.getValue())) {
+
+        if (!oldValue.equals(changeAfterItem.getValue())) {
             LOGGER.info(degradationTask.getName(), "降级验证成功");
             int i = degradationTaskService.updateDegradationTask(degradationTask);
             // 添加日志

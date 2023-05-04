@@ -1,18 +1,23 @@
 package com.ruoyi.web.controller.trade;
 
+import com.ruoyi.operation.common.constant.CommonPlatformConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.operation.common.constant.ResponseConstant;
 import com.ruoyi.operation.common.dto.request.GetOrderInfoRequest;
 import com.ruoyi.operation.common.web.CommonApiResponse;
 
+import cn.loveapp.operation.trade.dao.es.CommonAyTradeSearchESDao;
 import cn.loveapp.operation.trade.dao.mongo.OrderRefundRepository;
 import cn.loveapp.operation.trade.dao.mongo.OrderRepository;
 import cn.loveapp.operation.trade.dao.mongo.SubOrderRepository;
+import cn.loveapp.operation.trade.dto.request.UserProblemAnalysisRequest;
 
 /**
  * @author xujianhu
@@ -31,6 +36,27 @@ public class OrderInfoController {
 
     @Autowired
     private OrderRefundRepository orderRefundRepository;
+
+    @Autowired
+    private CommonAyTradeSearchESDao commonAyTradeSearchESDao;
+
+    @RequestMapping(value = "/getEsOrderInfo")
+    public AjaxResult getEsOrderInfo(@RequestBody UserProblemAnalysisRequest request) {
+        String tid = request.getTid();
+        String platformId = request.getPlatformId();
+        String appName = request.getAppName();
+        if (StringUtils.isAnyEmpty(tid, platformId, appName)) {
+            if (CommonPlatformConstants.PLATFORM_TAO.equals(platformId)) {
+                appName = null;
+            } else {
+                return AjaxResult.warn(ResponseConstant.PARAMSE_RROR.getMessage());
+            }
+        }
+
+        Object orderInfo = commonAyTradeSearchESDao.getByTid(tid, platformId, appName);
+
+        return AjaxResult.success(orderInfo);
+    }
 
     @RequestMapping(value = "/getOrderInfo")
     public CommonApiResponse<Object> getTcOrderInfo(@RequestBody GetOrderInfoRequest request) {

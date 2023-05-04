@@ -86,7 +86,8 @@
 </template>
 
 <script>
-// import {addDegradationTaskAPI} from "../../api/degradationApi";
+
+import {addDegradationTaskAPI} from "@/api/operation/degradation/degrade";
 
 export default {
   name: "AddDegradation",
@@ -123,25 +124,24 @@ export default {
   },
   methods: {
     addTask() {
-      // let taskInfo = this.taskInfo;
-      // addDegradationTaskAPI(taskInfo).then(res =>{
-      //   console.log(res);
-      //   if (res.data.code == 200){
-      //     this.$message({
-      //       message: res.data.body,
-      //       type:"success",
-      //       center: true
-      //     })
-      //     this.$emit('queryTask')
-      //     this.$emit('addDialogController')
-      //   }else{
-      //     this.$message({
-      //       message: res.data.message,
-      //       type:"error",
-      //       center: true
-      //     })
-      //   }
-      // })
+      let taskInfo = this.taskInfo;
+      addDegradationTaskAPI(taskInfo).then(res =>{
+        if (res.code === 200){
+          this.$message({
+            message: res.msg,
+            type:"success",
+            center: true
+          })
+          this.$emit('queryTask')
+          this.$emit('addDialogController')
+        }else{
+          this.$message({
+            message: res.msg,
+            type:"warning",
+            center: true
+          })
+        }
+      })
     },
 
     // 关闭弹框

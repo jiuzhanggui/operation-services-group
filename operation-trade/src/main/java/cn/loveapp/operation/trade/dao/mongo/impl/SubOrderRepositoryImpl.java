@@ -25,9 +25,9 @@ public class SubOrderRepositoryImpl extends CommonMongoDao implements SubOrderRe
     }
 
     @Override
-    public Object queryAllByTid(String tid, String storeId, String appName) {
-        Query query = query(where(MongoConstant.TID).is(tid).and(MongoConstant.STORE_ID_FIELD).is(storeId)
-            .and(MongoConstant.APP_NAME_FIELD).is(StringUtils.trimToNull(appName)));
+    public Object queryAllByTid(String tid, String platformId, String appName) {
+        Query query = query(where(MongoConstant.TID).is(tid).and(MongoConstant.STORE_ID_FIELD).is(platformId)
+            .and(MongoConstant.APP_NAME_FIELD).is(StringUtils.trimToNull(handleAppName(platformId, appName))));
 
         return findAll(query, Map.class);
     }

@@ -3,9 +3,9 @@
     <el-tab-pane label="ES存单数据库">
       <div slot="label" @click="getEsOrderInfo">ES存单数据库</div>
       <!--json展示-->
-      <!--<JsonView ref="esOrderData"></JsonView>-->
+      <JsonView ref="esOrderData"></JsonView>
       <!--数据库展示-->
-      <EsOrderInfoTable ref="esOrderData"></EsOrderInfoTable>
+      <!--<EsOrderInfoTable ref="esOrderData"></EsOrderInfoTable>-->
     </el-tab-pane>
 
     <el-tab-pane label="Mongo主单数据库">
@@ -54,7 +54,7 @@ import RefundOrderTable from "@/views/operation/trade/view/table/RefundOrderTabl
 import RefundApiTable from "@/views/operation/trade/view/table/RefundApiTable";
 import TcOrderTable from "@/views/operation/trade/view/table/TcOrderTable";
 import JsonView from "@/views/operation/trade/common/JsonView.vue";
-import {getOrderInfoAPI, getSuOrderInfoAPI, getRefundOrderInfoAPI} from "@/api/operation/trade/orderInfo";
+import {getOrderInfoAPI, getSuOrderInfoAPI, getRefundOrderInfoAPI, getEsInfoAPI} from "@/api/operation/trade/orderInfo";
 
 export default {
   name: "OrderInfoList",
@@ -91,11 +91,11 @@ export default {
           center: true
         });
       } else {
-        // getEsInfoAPI(userInfo).then(res => {
-        //   let body = res.data.body;
-        //   this.orderResultList = body
-        //   this.$refs.esOrderData.getData(body)
-        // })
+        getEsInfoAPI(userInfo).then(res => {
+          let body = res.data;
+          this.orderResultList = body
+          this.$refs.esOrderData.getData(body)
+        })
       }
 
     },

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.ctrip.framework.apollo.openapi.client.ApolloOpenApiClient;
@@ -25,11 +26,12 @@ public class DegradationConfiguration {
     private ApolloOpenApiConfig apolloOpenApiConfig;
 
     @Autowired
-    @Qualifier("userInfoStringRedisTemplate")
+    @Qualifier("userRedisTemplate")
     private StringRedisTemplate userRedisTemplate;
 
     @Autowired
-    private StringRedisTemplate orderRedisTemplate;
+    @Qualifier("stringRedisTemplate")
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * apolloAPI 开放客户端

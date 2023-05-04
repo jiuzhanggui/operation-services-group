@@ -7,7 +7,11 @@ import request from "@/utils/request";
  * @returns {AxiosPromise}
  */
 export function getEsInfoAPI(params) {
-  return http.post(`${request}/orderinfo/esorderinfo.list.get`, params)
+  return request({
+    url: `operation/orderInfo/getEsOrderInfo`,
+    method: 'post',
+    data: params,
+  })
 }
 
 /**

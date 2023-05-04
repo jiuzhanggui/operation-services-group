@@ -21,7 +21,7 @@ export function getDegradationTaskListAPI(params) {
  */
 export function addDegradationTaskAPI(params) {
   return request({
-    url: `degradation.task.add`,
+    url: `operation/degradation/degradation.task.add`,
     method: 'post',
     data: params,
   })
@@ -34,7 +34,7 @@ export function addDegradationTaskAPI(params) {
  */
 export function deleteDegradationTaskAPI(params) {
   return request({
-    url: `degradation.task.delete`,
+    url: `operation/degradation/degradation.task.delete`,
     method: 'post',
     data: params,
   })
@@ -47,7 +47,7 @@ export function deleteDegradationTaskAPI(params) {
  */
 export function degradationTaskControl(params) {
   return request({
-    url: `degradation.task.control`,
+    url: `operation/degradation/degradation.task.control`,
     method: 'post',
     data: params,
   })
@@ -60,7 +60,7 @@ export function degradationTaskControl(params) {
  */
 export function degradationTaskTimer(params) {
   return request({
-    url: `degradation.task.timer`,
+    url: `operation/degradation/degradation.task.timer`,
     method: 'post',
     data: params,
   })
@@ -73,7 +73,7 @@ export function degradationTaskTimer(params) {
  */
 export function cancelDegradationTaskTimer(params) {
   return request({
-    url: `degradation.task.canceltimer`,
+    url: `operation/degradation/degradation.task.canceltimer`,
     method: 'post',
     data: params,
   })
@@ -86,7 +86,7 @@ export function cancelDegradationTaskTimer(params) {
  */
 export function getDegradationTaskLog(params) {
   return request({
-    url: `degradation.log.get`,
+    url: `operation/degradation/degradation.log.get`,
     method: 'post',
     data: params,
   })

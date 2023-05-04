@@ -30,8 +30,6 @@ import cn.loveapp.operation.degradation.service.DegradationTaskService;
 public class DegradationTaskSchedulerServiceImpl implements DegradationTaskSchedulerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DegradationTaskSchedulerServiceImpl.class);
 
-    // private final ThreadPoolTaskScheduler syncScheduler;
-
     private final ScheduledExecutorService executor = SpringUtils.getBean("scheduledExecutorService");
 
     @Autowired
@@ -45,9 +43,6 @@ public class DegradationTaskSchedulerServiceImpl implements DegradationTaskSched
     public Map<String, ScheduledFuture<?>> taskMap = new ConcurrentHashMap<>();
     public List<String> taskList = new CopyOnWriteArrayList<String>();
 
-    // public DegradationTaskSchedulerServiceImpl(ThreadPoolTaskScheduler syncScheduler) {
-    // this.syncScheduler = syncScheduler;
-    // }
     /**
      * 查看已开启但还未执行的动态任务
      *
@@ -75,9 +70,7 @@ public class DegradationTaskSchedulerServiceImpl implements DegradationTaskSched
         Date startTime = Date.from(taskTime.atZone(ZoneId.systemDefault()).toInstant());
 
         ScheduledFuture<?> schedule = executor.schedule(createTaskRunner(degradationTask, taskName, taskTime),
-            startTime.getTime(), TimeUnit.MILLISECONDS);
-        // ScheduledFuture<?> schedule =
-        // syncScheduler.schedule(createTaskRunner(degradationTask, taskName, taskTime), startTime);
+            startTime.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         taskMap.put(taskName, schedule);
         taskList.add(taskName);
 

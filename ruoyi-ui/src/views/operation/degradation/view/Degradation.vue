@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import DegradationTable from "@/views/operation/degradation/view/DegradationTable.vue";
 import {getDegradationTaskListAPI} from "@/api/operation/degradation/degrade";
-import AddDegradation from "@/views/operation/trade/view/AddDegradation.vue";
 import Paging from "@/views/operation/common/Paging.vue";
+import AddDegradation from "@/views/operation/degradation/view/AddDegradation.vue";
+import DegradationTable from "@/views/operation/degradation/view/DegradationTable.vue";
 
 export default {
   name: "Degradation",
@@ -80,9 +80,8 @@ export default {
     getTaskList() {
       let taskInfo = this.taskInfo
       getDegradationTaskListAPI(taskInfo).then(res => {
-        debugger
-        this.taskList = res.body.degradationTaskList
-        this.nowTotal = res.body.total
+        this.taskList = res.data.degradationTaskList
+        this.nowTotal = res.data.total
       })
     },
 

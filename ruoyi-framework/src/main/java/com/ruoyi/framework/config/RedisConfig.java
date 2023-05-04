@@ -29,7 +29,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Autowired
     private RedisProperties redisProperties;
 
-    @Bean
+    @Bean(name = "redisTemplate")
     @SuppressWarnings(value = {"unchecked", "rawtypes"})
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
@@ -49,12 +49,34 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
-    @Bean(name = "userInfoStringRedisTemplate")
-    public StringRedisTemplate stringRedisTemplate() {
+    @Bean(name = "userRedisTemplate")
+    public StringRedisTemplate userRedisTemplate() {
+        RedisProperties.AyRedisProperties userRedisProperties = redisProperties.getUserRedisProperties();
         RedisStandaloneConfiguration redisStandaloneConfiguration =
-            new RedisStandaloneConfiguration(redisProperties.getHost(), redisProperties.getPort());
-        redisStandaloneConfiguration.setDatabase(redisProperties.getDatabase());
-        redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
+            new RedisStandaloneConfiguration(userRedisProperties.getHost(), userRedisProperties.getPort());
+        redisStandaloneConfiguration.setDatabase(userRedisProperties.getDatabase());
+        redisStandaloneConfiguration.setPassword(userRedisProperties.getPassword());
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
+        lettuceConnectionFactory.afterPropertiesSet();
+
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(lettuceConnectionFactory);
+        template.setKeySerializer(stringRedisSerializer);
+        template.setValueSerializer(stringRedisSerializer);
+        template.setHashValueSerializer(stringRedisSerializer);
+        template.setHashKeySerializer(stringRedisSerializer);
+
+        return template;
+    }
+
+    @Bean(name = "stringRedisTemplate")
+    public StringRedisTemplate stringRedisTemplate() {
+        RedisProperties.AyRedisProperties stringRedisProperties = redisProperties.getStringRedisProperties();
+        RedisStandaloneConfiguration redisStandaloneConfiguration =
+                new RedisStandaloneConfiguration(stringRedisProperties.getHost(), stringRedisProperties.getPort());
+        redisStandaloneConfiguration.setDatabase(stringRedisProperties.getDatabase());
+        redisStandaloneConfiguration.setPassword(stringRedisProperties.getPassword());
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         lettuceConnectionFactory.afterPropertiesSet();
 

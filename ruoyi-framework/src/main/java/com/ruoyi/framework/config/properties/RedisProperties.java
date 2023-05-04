@@ -1,6 +1,7 @@
 package com.ruoyi.framework.config.properties;
 
 import java.time.Duration;
+import java.util.Map;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,43 +11,49 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2023-04-27 10:00
  * @Description: redis配置文件
  */
-@ConfigurationProperties(prefix = "spring.redis.userinfo")
+@ConfigurationProperties(prefix = "spring.redis")
 @Data
 public class RedisProperties {
 
-    /**
-     * 数据库 默认0
-     */
-    private int database = 0;
+    private AyRedisProperties userRedisProperties;
 
-    /**
-     * 地址
-     */
-    private String url;
+    private AyRedisProperties stringRedisProperties;
 
-    /**
-     * 主机
-     */
-    private String host = "localhost";
+    @Data
+    public static class  AyRedisProperties {
+        /**
+         * 数据库 默认0
+         */
+        private int database = 0;
 
-    /**
-     * 密码
-     */
-    private String password;
+        /**
+         * 地址
+         */
+        private String url;
 
-    /**
-     * 端口号
-     */
-    private int port = 6379;
+        /**
+         * 主机
+         */
+        private String host = "localhost";
 
-    /**
-     * 连接超时
-     */
-    private Duration timeout;
+        /**
+         * 密码
+         */
+        private String password;
 
-    /**
-     * 客户端名
-     */
-    private String clientName;
+        /**
+         * 端口号
+         */
+        private int port = 6379;
 
+        /**
+         * 连接超时
+         */
+        private Duration timeout;
+
+        /**
+         * 客户端名
+         */
+        private String clientName;
+    }
 }

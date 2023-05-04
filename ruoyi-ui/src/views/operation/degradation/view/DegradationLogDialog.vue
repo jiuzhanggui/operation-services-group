@@ -20,8 +20,9 @@
 </template>
 
 <script>
-// import {getDegradationTaskLog} from "../../api/degradationApi";
-import Paging from "@/views/operation/trade/common/Paging";
+
+import Paging from "@/views/operation/common/Paging.vue";
+import {getDegradationTaskLog} from "@/api/operation/degradation/degrade";
 
 export default {
   name: "DegradationLogDialog",
@@ -61,10 +62,10 @@ export default {
     },
 
     getDegradationTaskLogRecord(){
-      // getDegradationTaskLog(this.taskInfo).then(res =>{
-      //   this.logList = res.data.body.content
-      //   this.nowTotal = res.data.body.total
-      // })
+      getDegradationTaskLog(this.taskInfo).then(res =>{
+        this.logList = res.data.content
+        this.nowTotal = res.data.total
+      })
     }
 
   }

@@ -1,6 +1,8 @@
 package cn.loveapp.operation.degradation.service.impl;
 
 import cn.loveapp.operation.degradation.entity.DegradationTaskLog;
+import com.ruoyi.common.annotation.DataSource;
+import com.ruoyi.common.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
  * @Description: 降级任务日志表(DegradationTaskLog)表服务实现类
  */
 @Service
+@DataSource(value = DataSourceType.DREAM_DATA_SOURCE)
 public class DegradationTaskLogServiceImpl implements DegradationTaskLogService {
 
     @Autowired

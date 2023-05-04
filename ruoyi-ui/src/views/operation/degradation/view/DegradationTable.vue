@@ -1,5 +1,5 @@
 <template>
-  <div style="width: auto">
+  <div>
     <el-table
       :data="degradationList"
       :header-cell-style="{'text-align':'center'}"
@@ -7,7 +7,7 @@
       :row-class-name="tableRow"
       @row-click="onRowClick"
       stripe
-      style="width: 200%;">
+      style="width: 100%;">
       <el-table-column
         type="index"
         label="序号"
@@ -63,6 +63,8 @@
           <el-button class="button" type="success" @click="timerDialogController(scope.row.name)">定时降级</el-button>
           <el-button class="button" type="success" @click="logDialogController(scope.row.name)">降级日志</el-button>
           <el-button type="danger" @click="deleteDegradationTask(scope.row.name)">删除任务</el-button>
+
+
         </template>
       </el-table-column>
 
@@ -73,18 +75,18 @@
     <!--设置定时任务弹窗-->
     <template v-if="isOpenTimerDialog">
       <DegradationTimerDialog ref="degradationTimerDialog" :taskName="taskInfo.taskName"
-                              @timerDialogController="timerDialogController" @refreshTable="refreshTable"/>
+                              @timerDialogController="timerDialogController" @refreshTable="refreshTable" />
     </template>
     <template v-if="isOpenLogDialog">
-      <DegradationLogDialog ref="log" :taskName="taskInfo.taskName" @logDialogController="logDialogController"/>
+      <DegradationLogDialog ref="log" :taskName="taskInfo.taskName" @logDialogController="logDialogController" />
     </template>
   </div>
 </template>
 
 <script>
-import DegradationTimerDialog from "./DegradationTimerDialog";
-import DegradationLogDialog from "./DegradationLogDialog";
-import Paging from "@/views/operation/common/Paging.vue";
+import Paging from "@/views/operation/trade/common/Paging.vue";
+import DegradationTimerDialog from "@/views/operation/degradation/view/DegradationTimerDialog.vue";
+import DegradationLogDialog from "@/views/operation/degradation/view/DegradationLogDialog.vue";
 import {degradationTaskControl, deleteDegradationTaskAPI} from "@/api/operation/degradation/degrade";
 
 export default {
@@ -92,7 +94,7 @@ export default {
   components: {DegradationLogDialog, DegradationTimerDialog, Paging},
   data() {
     return {
-      degradationList: {},
+      degradationList: [],
       isOpenTimerDialog: false,
       isOpenLogDialog: false,
       currentRowIndex: 0,
@@ -151,6 +153,7 @@ export default {
     refreshTable(req) {
       this.$emit('queryTask', req)
     },
+
     deleteDegradationTask(req) {
       this.$confirm('此操作将删除该任务, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -159,17 +162,17 @@ export default {
       }).then(() => {
         this.taskInfo.taskName = req
         deleteDegradationTaskAPI(this.taskInfo).then(res => {
-          if (res.data.code == 200) {
+          if (res.code == 200) {
             this.$message({
-              message: res.data.body,
-              type: "success",
+              message: res.msg,
+              type:"success",
               center: true
             })
             this.refreshTable(this.currentRowIndex)
           } else {
             this.$message({
-              message: res.data.message,
-              type: "error",
+              message: res.msg,
+              type:"error",
               center: true
             })
           }
@@ -184,7 +187,6 @@ export default {
     },
 
     degradationControl(req) {
-      ;
       this.openMessageBox(req)
     },
 
@@ -196,21 +198,22 @@ export default {
       }).then(() => {
         this.taskInfo.switchStatus = req.switchStatus
         this.taskInfo.taskName = req.name
-        degradationTaskControl(this.taskInfo).then(res => {
-          if (res.data.code == 200) {
+        degradationTaskControl(this.taskInfo).then(res =>{
+          if (res.code === 200){
             this.$message({
-              message: res.data.message,
+              message:res.msg,
               type: 'success',
               center: true
             })
             this.refreshTable(this.currentRowIndex)
           } else {
             this.$message({
-              message: res.data.message,
-              type: 'error',
+              message:res.msg,
+              type: 'warning',
               center: true
             })
-            req.switchStatus = +!req.switchStatus
+            // req.switchStatus = +!req.body.switchStatus
+            this.refreshTable(this.currentRowIndex)
           }
         })
       }).catch(() => {
@@ -219,7 +222,8 @@ export default {
           message: '已取消操作',
           center: true
         });
-        req.switchStatus = +!req.switchStatus
+        // req.switchStatus = +!req.body.switchStatus
+        this.refreshTable(this.currentRowIndex)
       });
     },
 
@@ -240,8 +244,6 @@ export default {
     onRowClick(row, event, column) {
       this.currentRowIndex = row.row_index;
     }
-
-
   }
 }
 </script>
