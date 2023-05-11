@@ -92,9 +92,23 @@ export default {
         });
       } else {
         getEsInfoAPI(userInfo).then(res => {
-          let body = res.data;
-          this.orderResultList = body
-          this.$refs.esOrderData.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            let body = res.data;
+            this.orderResultList = body
+            this.$refs.esOrderData.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
         })
       }
 
@@ -113,9 +127,22 @@ export default {
         });
       } else {
         getOrderInfoAPI(userInfo).then(res => {
-          let body = res.body;
-          this.orderResultList = body
-          this.$refs.mangoMainOrderData.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+            let body = res.data;
+            this.orderResultList = body
+            this.$refs.mangoMainOrderData.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
         })
       }
     },
@@ -133,9 +160,23 @@ export default {
         });
       } else {
         getSuOrderInfoAPI(userInfo).then(res => {
-          let body = res.body;
-          this.orderResultList = body
-          this.$refs.mangoSubOrderData.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            let body = res.data;
+            this.orderResultList = body
+            this.$refs.mangoSubOrderData.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
         })
       }
     },
@@ -154,9 +195,24 @@ export default {
       } else {
         let body = []
         getRefundOrderInfoAPI(userInfo).then(res => {
-          body = res.body;
-          this.orderResultList = body
-          this.$refs.refundOrderData.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            body = res.data;
+            this.orderResultList = body
+            this.$refs.refundOrderData.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
+
         })
       }
     },

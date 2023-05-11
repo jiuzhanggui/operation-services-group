@@ -21,17 +21,17 @@
       <el-tab-pane label="order_search订购记录表">
         <div slot="label" @click="getOrderSearchInfo">order_search订购记录表</div>
         <!--json展示-->
-        <JsonView ref="orderSearchParams"></JsonView>
+        <!--<JsonView ref="orderSearchParams"></JsonView>-->
         <!--数据库展示-->
-        <!--<OrderSearchTable ref="OrderSearchParams"/>-->
+        <OrderSearchTable ref="orderSearchParams"/>
       </el-tab-pane>
 
       <el-tab-pane label="open_user开户操作日志表">
         <div slot="label" @click="getOpenUserInfo">open_user开户操作日志表</div>
         <!--json展示-->
-        <JsonView ref="openUserParams"></JsonView>
+        <!--<JsonView ref="openUserParams"></JsonView>-->
         <!--数据库展示-->
-        <!--<OpenUserTable ref="openUserParams"/>-->
+        <OpenUserTable ref="openUserParams"/>
       </el-tab-pane>
 
     </el-tabs>
@@ -91,9 +91,24 @@ export default {
       } else {
 
         getOpenUserDataAPI(userInfo).then(res => {
-          let body = res.body;
-          this.userResultList = body
-          this.$refs.openUserParams.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            let body = res.data;
+            this.userResultList = body
+            this.$refs.openUserParams.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
+
         })
       }
     },
@@ -111,9 +126,23 @@ export default {
         });
       } else {
         getOrderSearchDataAPI(userInfo).then(res => {
-          let body = res.body;
-          this.userResultList = body
-          this.$refs.orderSearchParams.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            let body = res.data;
+            this.userResultList = body
+            this.$refs.orderSearchParams.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
         })
       }
     },
@@ -131,9 +160,23 @@ export default {
         });
       } else {
         getUserProductDataAPI(userInfo).then(res => {
-          let body = res.body;
-          this.userResultList = body
-          this.$refs.userProductParams.getData(body)
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: res.msg,
+              center: true
+            });
+
+            let body = res.data;
+            this.userResultList = body
+            this.$refs.userProductParams.getData(body)
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg,
+              center: true
+            });
+          }
         })
       }
     },
@@ -144,9 +187,23 @@ export default {
     getUserExtInfo() {
       let userInfo = this.userInfo;
       getExInfoDataAPI(userInfo).then(res => {
-        let body = res.body;
-        this.userResultList = body
-        this.$refs.extParams.getData(body)
+        if (res.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+            center: true
+          });
+
+          let body = res.data;
+          this.userResultList = body
+          this.$refs.extParams.getData(body)
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg,
+            center: true
+          });
+        }
       })
 
 

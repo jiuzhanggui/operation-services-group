@@ -36,7 +36,12 @@ public class ResourcesConfig implements WebMvcConfigurer
         /** swagger配置 */
         registry.addResourceHandler("/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
-                .setCacheControl(CacheControl.maxAge(5, TimeUnit.HOURS).cachePublic());;
+                .setCacheControl(CacheControl.maxAge(5, TimeUnit.HOURS).cachePublic());
+
+        /**
+         * 前端静态资源配置
+         */
+        registry.addResourceHandler("/static/dist/**").addResourceLocations("classpath:/static/");
     }
 
     /**

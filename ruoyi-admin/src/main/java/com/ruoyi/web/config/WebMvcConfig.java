@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -40,5 +41,11 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         mediaTypeList.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(mediaTypeList);
         converters.add(converter);
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        super.addResourceHandlers(registry);
     }
 }

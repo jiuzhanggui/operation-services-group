@@ -101,7 +101,11 @@ export default {
       }, {
         "label": "视频号",
         "value": "WXVIDEOSHOP"
-      }],
+      }, {
+        "label": "小红书",
+        "value": "XHS"
+      }
+      ],
       appNameOptions: [{
         "label": "交易",
         "value": "trade"

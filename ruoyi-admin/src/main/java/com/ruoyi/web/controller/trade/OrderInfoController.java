@@ -59,45 +59,42 @@ public class OrderInfoController {
     }
 
     @RequestMapping(value = "/getOrderInfo")
-    public CommonApiResponse<Object> getTcOrderInfo(@RequestBody GetOrderInfoRequest request) {
+    public AjaxResult getTcOrderInfo(@RequestBody GetOrderInfoRequest request) {
 
         if (StringUtils.isEmpty(request.getTid())) {
-            return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
-                ResponseConstant.PARAMSE_RROR.getMessage());
+            return AjaxResult.warn(ResponseConstant.PARAMSE_RROR.getMessage());
         }
 
         String tid = request.getTid().trim();
         String platformId = request.getPlatformId();
         String appName = request.getAppName();
-        return CommonApiResponse.success(orderRepository.queryAllByTid(tid, platformId, appName));
+        return AjaxResult.success(orderRepository.queryAllByTid(tid, platformId, appName));
     }
 
     @RequestMapping(value = "/getSubOrderInfo")
-    public CommonApiResponse<Object> getTcSubOrderInfo(@RequestBody GetOrderInfoRequest request) {
+    public AjaxResult getTcSubOrderInfo(@RequestBody GetOrderInfoRequest request) {
 
         if (StringUtils.isEmpty(request.getTid())) {
-            return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
-                ResponseConstant.PARAMSE_RROR.getMessage());
+            return AjaxResult.warn(ResponseConstant.PARAMSE_RROR.getMessage());
         }
 
         String tid = request.getTid().trim();
         String platformId = request.getPlatformId();
         String appName = request.getAppName();
 
-        return CommonApiResponse.success(subOrderRepository.queryAllByTid(tid, platformId, appName));
+        return AjaxResult.success(subOrderRepository.queryAllByTid(tid, platformId, appName));
     }
 
     @RequestMapping(value = "/getRefundOrderInfo")
-    public CommonApiResponse<Object> getRefundOrderInfo(@RequestBody GetOrderInfoRequest request) {
+    public AjaxResult getRefundOrderInfo(@RequestBody GetOrderInfoRequest request) {
 
         if (StringUtils.isEmpty(request.getTid())) {
-            return CommonApiResponse.failed(ResponseConstant.PARAMSE_RROR.getCode(),
-                ResponseConstant.PARAMSE_RROR.getMessage());
+            return AjaxResult.warn(ResponseConstant.PARAMSE_RROR.getMessage());
         }
 
         String tid = request.getTid().trim();
         String platformId = request.getPlatformId();
         String appName = request.getAppName();
-        return CommonApiResponse.success(orderRefundRepository.queryAllByTid(tid, platformId, appName));
+        return AjaxResult.success(orderRefundRepository.queryAllByTid(tid, platformId, appName));
     }
 }

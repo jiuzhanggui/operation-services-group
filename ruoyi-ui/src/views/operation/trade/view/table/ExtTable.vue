@@ -123,7 +123,7 @@ export default {
       if (data == null) {
         this.$message.warning("数据不存在")
       }
-      if (data[0] != null) {
+      if (data[0] != null || data.length() > 0) {
         // 添加Table数据
         this.addTableData(data)
       } else {
